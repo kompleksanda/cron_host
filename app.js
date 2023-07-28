@@ -51,8 +51,10 @@ function dateInBetweenCrons(cronExpression1, cronExpression2, currentDate = new 
     // Check if the current date is between the two occurrences
     if(currentDate >= nextOccurrence1 && currentDate <= prevOccurrence2) {
         console.log("The current date is between the two cron expressions!");
+        return true;
     } else {
         console.log("The current date is not between the two cron expressions.");
+        return false;
     }
 }
 
