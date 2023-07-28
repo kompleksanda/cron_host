@@ -1,3 +1,6 @@
+const express = require('express');
+const app = express();
+const port = 3000;
 const cronstrue = require('cronstrue');
 const later = require('later');
 
@@ -5,7 +8,7 @@ function changeTimezone(date, ianatz) {
     return new Date(date.toLocaleString('en-US', { timeZone: ianatz }));
 }
 
-function dateEqualsCron(cronExpression, currentDate) {
+function dateEqualsCron(cronExpression, currentDate = new Date) {
     // Convert cron expression to human readable string
     const humanReadable = cronstrue.toString(cronExpression);
     console.log(humanReadable);
@@ -27,7 +30,7 @@ function dateEqualsCron(cronExpression, currentDate) {
     }
 }
 
-function dateInBetweenCrons(cronExpression1, cronExpression2, currentDate) {
+function dateInBetweenCrons(cronExpression1, cronExpression2, currentDate = new Date) {
     const humanReadable1 = cronstrue.toString(cronExpression1);
     const humanReadable2 = cronstrue.toString(cronExpression2);
     console.log(humanReadable1)
@@ -51,12 +54,33 @@ function dateInBetweenCrons(cronExpression1, cronExpression2, currentDate) {
     } else {
         console.log("The current date is not between the two cron expressions.");
     }
-
 }
-// cron schedule
-const cronExpression = "* * 21-28 * 4";
-//console.log(dateEqualsCron(cronExpression, new Date));
-const cronExpression1 = "0 0 24-31 * *";
-const cronExpression2 = "0 0 1-7 * 1";
-console.log(dateInBetweenCrons(cronExpression1, cronExpression2, new Date));
 
+app.get('/equal/:param1/:param2?', (req, res) => {
+    const { param1, param2 } = req.params;
+    if (param2 !== undefined) {
+        res.send(dateEqualsCron(param1, param2));
+    } else {
+        res.send(dateEqualsCron(param1));
+    }
+    res.send(false);
+});
+  
+app.get('/between/:param1/:param2/:param3?', (req, res) => {
+    const { param1, param2, param3 } = req.params;
+    if (param3 !== undefined) {
+        res.send(dateInBetweenCrons(param1, param2, param3));
+    } else {
+        res.send(dateInBetweenCrons(param1, param2));
+    }
+    res.send(false);
+});
+  
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+});
+
+
+
+//console.log(dateEqualsCron("0 8 22-31 */3 *", new Date));
+//console.log(dateInBetweenCrons("0 0 24-31 * *", "0 0 1-7 * 1", new Date));
