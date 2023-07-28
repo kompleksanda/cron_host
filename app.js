@@ -60,20 +60,22 @@ app.get('/equal/:param1/:param2?', (req, res) => {
     const { param1, param2 } = req.params;
     if (param2 !== undefined) {
         res.send(dateEqualsCron(param1, param2));
+        return;
     } else {
         res.send(dateEqualsCron(param1));
+        return;
     }
-    res.send(false);
 });
   
 app.get('/between/:param1/:param2/:param3?', (req, res) => {
     const { param1, param2, param3 } = req.params;
     if (param3 !== undefined) {
         res.send(dateInBetweenCrons(param1, param2, param3));
+        return;
     } else {
         res.send(dateInBetweenCrons(param1, param2));
+        return;
     }
-    res.send(false);
 });
   
 app.listen(port, () => {
