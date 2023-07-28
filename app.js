@@ -61,7 +61,7 @@ function dateInBetweenCrons(cronExpression1, cronExpression2, currentDate = new 
 app.get('/equal/:param1/:param2?', (req, res) => {
     const { param1, param2 } = req.params;
     if (param2 !== undefined) {
-        res.send(dateEqualsCron(param1, param2));
+        res.send(dateEqualsCron(param1, new Date(param2)));
         return;
     } else {
         res.send(dateEqualsCron(param1));
@@ -72,7 +72,7 @@ app.get('/equal/:param1/:param2?', (req, res) => {
 app.get('/between/:param1/:param2/:param3?', (req, res) => {
     const { param1, param2, param3 } = req.params;
     if (param3 !== undefined) {
-        res.send(dateInBetweenCrons(param1, param2, param3));
+        res.send(dateInBetweenCrons(param1, param2, new Date(param3)));
         return;
     } else {
         res.send(dateInBetweenCrons(param1, param2));
