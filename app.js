@@ -23,7 +23,8 @@ function dateEqualsCron(cronExpression, currentDate = new Date) {
        currentDate.getMinutes() === nextOccurrence.getMinutes()-1) {
         console.log("The cron expression matches the current date/time!");
         return {
-            status : true
+            status : true,
+            happensEvery: humanReadable
         }
     } else {
         console.log("The cron expression does not match the current date/time.");
@@ -57,7 +58,8 @@ function dateInBetweenCrons(cronExpression1, cronExpression2, currentDate = new 
         console.log("The current date is between the two cron expressions!");
         return {
             status : true,
-            nextDate: prevOccurrence2
+            nextDate: prevOccurrence2,
+            happensEvery: humanReadable2
         }
     } else {
         console.log("The current date is not between the two cron expressions.");
