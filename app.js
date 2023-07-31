@@ -72,10 +72,10 @@ app.get('/equal/:param1/:param2?', (req, res) => {
 app.get('/between/:param1/:param2/:param3?', (req, res) => {
     const { param1, param2, param3 } = req.params;
     if (param3 !== undefined) {
-        res.json({Reply: dateInBetweenCrons(param1, param2, new Date(param3))});
+        res.send(dateInBetweenCrons(param1, param2, new Date(param3)));
         return;
     } else {
-        res.json({Reply: dateInBetweenCrons(param1, param2)});
+        res.send(dateInBetweenCrons(param1, param2));
         return;
     }
 });
