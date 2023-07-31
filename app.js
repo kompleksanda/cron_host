@@ -46,21 +46,25 @@ function dateInBetweenCrons(cronExpression1, cronExpression2, currentDate = new 
     const schedule2 = later.parse.cron(cronExpression2);
 
     // Get the next occurrence of the first schedule
-    const nextOccurrence1 = later.schedule(schedule1).prev(1);
-    console.log(nextOccurrence1)
+    const s1p = later.schedule(schedule1).prev(1);
+    const s1n = later.schedule(schedule1).next(1);
+    console.log(s1p)
 
     // Get the previous occurrence of the second schedule
-    const prevOccurrence2 = later.schedule(schedule2).next(1);
-    console.log(prevOccurrence2)
+    const s2n = later.schedule(schedule2).next(1);
+    const s2p = later.schedule(schedule2).prev(1);
+    console.log(s2n)
 
     // Check if the current date is between the two occurrences
-    if(currentDate >= nextOccurrence1 && currentDate <= prevOccurrence2) {
-        console.log("The current date is between the two cron expressions!");
-        return {
-            status : true,
-            nextDate: prevOccurrence2,
-            alertDate: nextOccurrence1,
-            happensEvery: humanReadable2
+    if(currentDate >= s1p && currentDate <= s2n) {
+        if (!((s2p >= s1p && s2p <= s2n) || (s1n >= s1p && s1n <= s2n))) {
+            console.log("The current date is between the two cron expressions!");
+            return {
+                status : true,
+                nextDate: s2n,
+                alertDate: s1p,
+                happensEvery: humanReadable2
+            }
         }
     } else {
         console.log("The current date is not between the two cron expressions.");
