@@ -22,11 +22,15 @@ function dateEqualsCron(cronExpression, currentDate = new Date) {
     if(currentDate.getHours() === nextOccurrence.getHours() &&
        currentDate.getMinutes() === nextOccurrence.getMinutes()-1) {
         console.log("The cron expression matches the current date/time!");
-        return true
+        return {
+            status : true
+        }
     } else {
         console.log("The cron expression does not match the current date/time.");
         console.log("Next occurrence is on: " + changeTimezone(nextOccurrence, "Africa/Lagos"));
-        return false;
+        return {
+            status : false
+        }
     }
 }
 
@@ -51,20 +55,25 @@ function dateInBetweenCrons(cronExpression1, cronExpression2, currentDate = new 
     // Check if the current date is between the two occurrences
     if(currentDate >= nextOccurrence1 && currentDate <= prevOccurrence2) {
         console.log("The current date is between the two cron expressions!");
-        return true;
+        return {
+            status : true,
+            nextDate: prevOccurrence2
+        }
     } else {
         console.log("The current date is not between the two cron expressions.");
-        return false;
+        return {
+            status: false
+        }
     }
 }
 
 app.get('/equal/:param1/:param2?', (req, res) => {
     const { param1, param2 } = req.params;
     if (param2 !== undefined) {
-        res.send(dateEqualsCron(param1, new Date(param2)));
+        res.json(dateEqualsCron(param1, new Date(param2)));
         return;
     } else {
-        res.send(dateEqualsCron(param1));
+        res.json(dateEqualsCron(param1));
         return;
     }
 });
