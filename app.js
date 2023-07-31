@@ -59,6 +59,7 @@ function dateInBetweenCrons(cronExpression1, cronExpression2, currentDate = new 
         return {
             status : true,
             nextDate: prevOccurrence2,
+            alertDate: nextOccurrence1,
             happensEvery: humanReadable2
         }
     } else {
