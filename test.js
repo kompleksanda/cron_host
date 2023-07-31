@@ -1,6 +1,3 @@
-const express = require('express');
-const app = express();
-const port = 3000;
 const cronstrue = require('cronstrue');
 const later = require('later');
 
@@ -58,33 +55,6 @@ function dateInBetweenCrons(cronExpression1, cronExpression2, currentDate = new 
     }
 }
 
-app.get('/equal/:param1/:param2?', (req, res) => {
-    const { param1, param2 } = req.params;
-    if (param2 !== undefined) {
-        res.send(dateEqualsCron(param1, new Date(param2)));
-        return;
-    } else {
-        res.send(dateEqualsCron(param1));
-        return;
-    }
-});
-  
-app.get('/between/:param1/:param2/:param3?', (req, res) => {
-    const { param1, param2, param3 } = req.params;
-    if (param3 !== undefined) {
-        res.json({Reply: dateInBetweenCrons(param1, param2, new Date(param3))});
-        return;
-    } else {
-        res.json({Reply: dateInBetweenCrons(param1, param2)});
-        return;
-    }
-});
-  
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
 
-
-
-//console.log(dateEqualsCron("0 8 22-31 */3 *", new Date));
+console.log(dateEqualsCron("0 8 22-31 3,6,9,12 *"));//0 12 * * 1
 //console.log(dateInBetweenCrons("0 0 24-31 * *", "0 0 1-7 * 1", new Date));
