@@ -1,8 +1,9 @@
 const express = require('express');
-const app = express();
-const port = 3000;
+var moment = require('moment');
 const cronstrue = require('cronstrue');
 const later = require('later');
+const app = express();
+const port = 3000;
 
 function changeTimezone(date, ianatz) {
     return new Date(date.toLocaleString('en-US', { timeZone: ianatz }));
@@ -72,6 +73,41 @@ function dateInBetweenCrons(cronExpression1, cronExpression2, currentDate = new 
     }
 }
 
+
+function alertCron(alertBefore, cronExpression2, currentDate = new Date) {
+    const humanReadable2 = cronstrue.toString(cronExpression2);
+    console.log(humanReadable2)
+
+    // Parse the cron expressions to schedules
+    const schedule2 = later.parse.cron(cronExpression2);
+
+    // Get the previous occurrence of the second schedule
+    const s2n = later.schedule(schedule2).next(1);
+    const s2p = later.schedule(schedule2).prev(1);
+    console.log(s2n)
+
+    beforeSplit = alertBefore.split(" ");
+    var prevDate = moment(s2n).subtract(parseInt(beforeSplit[0]), beforeSplit[1]).toDate();
+
+    // Check if the current date is between the two occurrences
+    if (currentDate >= prevDate && currentDate <= s2n) {
+        console.log("The current date is between deadline and alertdate");
+        return {
+            status : true,
+            nextDate: s2n,
+            alertDate: prevDate,
+            happensEvery: humanReadable2
+        }
+    } else {
+        console.log("The current date is not between deadline and alertdate");
+        return {
+            status: false
+        }
+    }
+}
+
+
+
 app.get('/equal/:param1/:param2?', (req, res) => {
     const { param1, param2 } = req.params;
     if (param2 !== undefined) {
@@ -93,7 +129,18 @@ app.get('/between/:param1/:param2/:param3?', (req, res) => {
         return;
     }
 });
-  
+
+app.get('/alertCron/:param1/:param2/:param3?', (req, res) => {
+    const { param1, param2, param3 } = req.params;
+    if (param3 !== undefined) {
+        res.send(alertCron(param1, param2, new Date(param3)));
+        return;
+    } else {
+        res.send(alertCron(param1, param2));
+        return;
+    }
+});
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
