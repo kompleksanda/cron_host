@@ -95,16 +95,21 @@ function alertCron(alertBefore, cronExpression2, currentDate = new Date) {
             status : true,
             nextDate: s2n,
             alertDate: prevDate,
-            happensEvery: humanReadable2
+            happensEvery: humanReadable2,
+            s2p: s2p
         }
     } else {
         console.log("The current date is not between deadline and alertdate");
         return {
-            status: false
+            status: false,
+            nextDate: s2n,
+            alertDate: prevDate,
+            happensEvery: humanReadable2,
+            s2p: s2p
         }
     }
 }
 
 //console.log(dateEqualsCron("0 8 22-31 3,6,9,12 *"));//0 12 * * 1
 //console.log(dateInBetweenCrons("0 8 22-31 * *", "0 8 1-14 * *", new Date));
-console.log(alertCron("1 week", "0 0 8 ? * 1#1"))
+console.log(alertCron("1 week", "0 8 1-14 * *"))
